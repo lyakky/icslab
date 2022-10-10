@@ -36,11 +36,19 @@ static int cmd_si(char *args) {
   cpu_exec(*(uint*)args);
   return 0;
 }
-
-//static int cmd_info(char *args) {
-//  isa_reg_display();
-//  return 0;
-//}
+    
+static int cmd_info(char *args) {
+  if (strcmp(args, "r") == 0)
+  {
+    isa_reg_display();
+  } else if(strcmp(args, "w") == 0)
+  {
+    //do display info
+  } else {
+    return -1;
+  }
+  return 0;
+} 
 
 
 static int cmd_q(char *args) {
@@ -59,6 +67,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   {"si", "Step by args", cmd_si},
   { "q", "Exit NEMU", cmd_q },
+  {"info","display program info", cmd_info}
 
   /* TODO: Add more commands */
 

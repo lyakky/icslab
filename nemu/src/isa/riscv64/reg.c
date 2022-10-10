@@ -8,7 +8,13 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  
+  size_t regs_len = sizeof(regs) / sizeof(regs[0]);
+  printf("regs val :\n");
+  for (size_t i = 0; i < regs_len; i++)
+  {
+      printf("%s : %ld\t", regs[i], gpr(i));
+  }
+  printf("\n");
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
