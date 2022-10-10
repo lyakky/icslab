@@ -92,7 +92,7 @@ static int cmd_memory(char *args)
   for (size_t i = 0; i < len; i++)
   {
     word_t v = vaddr_read(loc + 4 * i, 4);
-    printf("loc:%08lx, memval:%08lx\n", loc + i * 4, v);
+    printf("loc:%#08lx, memval:%#08lx\n", loc + i * 4, v);
   }
 
   printf("\n");
