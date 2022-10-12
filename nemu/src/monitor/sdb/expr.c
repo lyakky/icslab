@@ -6,7 +6,10 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ, TK_PLUS,TK_MINUS, TK_ASTERISK, TK_SLASH,
+  TK_LPAREN, TK_RPAREN, TK_INTEGER
+
+  
 
   /* TODO: Add more token types */
 
@@ -24,6 +27,10 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"-", TK_MINUS},         // minus
+  {"//*", TK_ASTERISK},  //asterisk
+  {"/", TK_SLASH},       //SLASH
+  {"[0-9]+" ,TK_INTEGER}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -50,10 +57,21 @@ void init_regex() {
 typedef struct token {
   int type;
   char str[32];
-} Token;
+  } Token;
 
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
+
+static void generate_token(char *pos, size_t len, unsigned int type)
+{
+
+  tokens[nr_token].type = type;
+  for (size_t i = 0; i < len && i < 32; i++)
+  {
+    tokens[nr_token].str[i] = *(pos + i);
+  }
+  nr_token++;
+}
 
 static bool make_token(char *e) {
   int position = 0;
@@ -80,6 +98,16 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
+          case TK_EQ:
+            generate_token(substr_start, substr_len, TK_EQ);
+            break;
+          case TK_PLUS:
+            generate_token(substr_start, substr_len, TK_PLUS);  
+            break;
+          case TK_INTEGER:
+            generate_token(substr_start, substr_len, TK_INTEGER);
+            break;  
+
           default: TODO();
         }
 
@@ -97,14 +125,29 @@ static bool make_token(char *e) {
 }
 
 
-word_t expr(char *e, bool *success) {
+  word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
+  //TODO();
+  int cur = 0,peer = 1;
+  uint32_t res = 0;
+  switch (tokens[cur].type)
+  {
+  case TK_INTEGER:
+    res += atoi(tokens[cur].str);
+    if (peer < nr_token)
+    {
+      return res; 
+    }
+    
+    break;
+  
+  default:
+    break;
+  }
   return 0;
 }

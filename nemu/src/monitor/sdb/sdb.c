@@ -62,7 +62,7 @@ static int cmd_info(char *args)
 
 static int cmd_memory(char *args)
 {
-  char *limit = NULL, *expr = NULL;
+  char *limit = NULL, *exprstr = NULL;
   char *token = NULL, *tmp = NULL;
   int ind;
   for (tmp = args, ind = 0;; tmp = NULL, ind++)
@@ -84,11 +84,13 @@ static int cmd_memory(char *args)
     }
     if (ind == 1)
     {
-      expr = token;
+      exprstr = token;
     }
   }
   int len = atoi(limit);
-  uint64_t loc = strtoull(expr, NULL, 16);
+  bool b_expr;
+  //uint64_t loc = strtoull(exprstr, NULL, 16);
+  uint64_t loc = expr(exprstr, &b_expr);
   for (size_t i = 0; i < len; i++)
   {
     word_t v = vaddr_read(loc + 4 * i, 4);
