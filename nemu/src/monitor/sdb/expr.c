@@ -31,7 +31,7 @@ static struct rule {
   {"//*", TK_ASTERISK},  //asterisk
   {"/", TK_SLASH},       //SLASH
   {"[0-9]+", TK_INT10},
-  {"0x[0-9a-fA-F]{8}", TK_INT16}
+  {"0x[0-9a-fA-F]\{8}", TK_INT16}
 };
 
 #define NR_REGEX ARRLEN(rules)
