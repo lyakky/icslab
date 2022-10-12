@@ -91,6 +91,12 @@ static int cmd_memory(char *args)
   bool b_expr;
   //uint64_t loc = strtoull(exprstr, NULL, 16);
   uint64_t loc = expr(exprstr, &b_expr);
+  if (!b_expr)
+  {
+    nemu_state.state = NEMU_ABORT;
+    return -1;
+  }
+  
   for (size_t i = 0; i < len; i++)
   {
     word_t v = vaddr_read(loc + 4 * i, 4);

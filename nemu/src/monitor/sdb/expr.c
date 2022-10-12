@@ -7,7 +7,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_PLUS,TK_MINUS, TK_ASTERISK, TK_SLASH,
-  TK_LPAREN, TK_RPAREN, TK_INTEGER
+  TK_LPAREN, TK_RPAREN, TK_INT10,  TK_INT16
 
   
 
@@ -30,7 +30,8 @@ static struct rule {
   {"-", TK_MINUS},         // minus
   {"//*", TK_ASTERISK},  //asterisk
   {"/", TK_SLASH},       //SLASH
-  {"[0-9]+" ,TK_INTEGER}
+  {"[0-9]+", TK_INT10},
+  {"0x[0-9a-fA-F]{8}", TK_INT16}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -99,13 +100,10 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case TK_EQ:
-            generate_token(substr_start, substr_len, TK_EQ);
-            break;
           case TK_PLUS:
-            generate_token(substr_start, substr_len, TK_PLUS);  
-            break;
-          case TK_INTEGER:
-            generate_token(substr_start, substr_len, TK_INTEGER);
+          case TK_INT16:
+          case TK_INT10:
+            generate_token(substr_start, substr_len, rules[i].token_type);
             break;  
 
           default: TODO();
@@ -137,8 +135,8 @@ static bool make_token(char *e) {
   uint32_t res = 0;
   switch (tokens[cur].type)
   {
-  case TK_INTEGER:
-    res += atoi(tokens[cur].str);
+  case TK_INT16:
+    res += strtoul(tokens[cur].str, NULL, 16);
     if (peer < nr_token)
     {
       return res; 
