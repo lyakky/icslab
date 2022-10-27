@@ -133,12 +133,12 @@ static bool make_token(char *e) {
   /* TODO: Insert codes to evaluate the expression. */
   //TODO();
   int cur = 0,peer = 1;
-  uint32_t res = 0;
+  unsigned long res = 0;
   switch (tokens[cur].type)
   {
   case TK_INT16:
     res += strtoul(tokens[cur].str, NULL, 16);
-    Log("resolv INT16:%s, value:%d", tokens[cur].str, res);
+    Log("resolv INT16:%s, value:%ld", tokens[cur].str, res);
     if (peer > nr_token)
     {
       return res; 
