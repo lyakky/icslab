@@ -137,7 +137,7 @@ static bool make_token(char *e) {
   switch (tokens[cur].type)
   {
   case TK_INT16:
-    res += strtoul(tokens[cur].str, NULL, 16);
+    res += strtoul(tokens[cur].str, NULL, 10);
     Log("resolv INT16:%s, value:%d", tokens[cur].str, res);
     if (peer > nr_token)
     {
