@@ -147,5 +147,6 @@ static bool make_token(char *e) {
   }
   cur ++;
   peer ++;
+  *success = true;
   return 0;
 }
