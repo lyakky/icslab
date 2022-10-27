@@ -137,7 +137,7 @@ static bool make_token(char *e) {
   {
   case TK_INT16:
     res += strtoul(tokens[cur].str, NULL, 16);
-    if (peer < nr_token)
+    if (peer > nr_token)
     {
       return res; 
     }
