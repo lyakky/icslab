@@ -104,6 +104,7 @@ static bool make_token(char *e) {
           case TK_INT16:
           case TK_INT10:
             generate_token(substr_start, substr_len, rules[i].token_type);
+            Log("generate_token type:%d,content:%s", tokens[nr_token-1].type, tokens[nr_token-1].str);
             break;  
 
           default: TODO();
