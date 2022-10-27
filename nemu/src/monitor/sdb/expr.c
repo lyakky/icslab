@@ -140,6 +140,8 @@ static bool make_token(char *e) {
   case TK_INT16:
     res += strtoul(tokens[cur].str, NULL, 16);
     Log("resolv INT16:%s, value:%ld", tokens[cur].str, res);
+    *success = true;
+    return (uint64_t)res;
     break;
   
   default:
@@ -148,5 +150,6 @@ static bool make_token(char *e) {
   cur ++;
   peer ++;
   *success = true;
+  
   return 0;
 }
