@@ -33,7 +33,7 @@ static struct rule {
   {"\\*", TK_ASTERISK},  //asterisk
   {"/", TK_SLASH},       //SLASH
   {"\\(", TK_LPAREN},      //(
-  {")", TK_RPAREN}       //)
+  {"\\)", TK_RPAREN}       //)
 };
 
 #define NR_REGEX ARRLEN(rules)
