@@ -32,7 +32,7 @@ static struct rule {
   {"-", TK_MINUS},         // minus
   {"\\*", TK_ASTERISK},  //asterisk
   {"/", TK_SLASH},       //SLASH
-  {"\(", TK_LPAREN},      //(
+  {"(", TK_LPAREN},      //(
   {")", TK_RPAREN}       //)
 };
 
