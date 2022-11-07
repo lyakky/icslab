@@ -27,11 +27,13 @@ static struct rule {
   {"0[xX][0-9a-fA-F]{8}", TK_INT16},
   {"[0-9]+", TK_INT10},
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {"\\+", TK_PLUS},         // plus
   {"==", TK_EQ},        // equal
   {"-", TK_MINUS},         // minus
   {"\\*", TK_ASTERISK},  //asterisk
   {"/", TK_SLASH},       //SLASH
+  {"\(", TK_LPAREN},      //(
+  {")", TK_RPAREN}       //)
 };
 
 #define NR_REGEX ARRLEN(rules)

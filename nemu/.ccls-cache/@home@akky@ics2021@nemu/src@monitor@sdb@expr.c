@@ -24,14 +24,14 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
+  {"0[xX][0-9a-fA-F]{8}", TK_INT16},
+  {"[0-9]+", TK_INT10},
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
   {"-", TK_MINUS},         // minus
-  {"//*", TK_ASTERISK},  //asterisk
+  {"\\*", TK_ASTERISK},  //asterisk
   {"/", TK_SLASH},       //SLASH
-  {"[0-9]+", TK_INT10},
-  {"0[xX][0-9a-fA-F]{8}", TK_INT16}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -104,6 +104,7 @@ static bool make_token(char *e) {
           case TK_INT16:
           case TK_INT10:
             generate_token(substr_start, substr_len, rules[i].token_type);
+            Log("generate_token type:%d,content:%s", tokens[nr_token-1].type, tokens[nr_token-1].str);
             break;  
 
           default: TODO();
@@ -132,20 +133,23 @@ static bool make_token(char *e) {
   /* TODO: Insert codes to evaluate the expression. */
   //TODO();
   int cur = 0,peer = 1;
-  uint32_t res = 0;
+  unsigned long res = 0;
+  
   switch (tokens[cur].type)
   {
   case TK_INT16:
     res += strtoul(tokens[cur].str, NULL, 16);
-    if (peer < nr_token)
-    {
-      return res; 
-    }
-    
+    Log("resolv INT16:%s, value:%ld", tokens[cur].str, res);
+    *success = true;
+    return (uint64_t)res;
     break;
   
   default:
     break;
   }
+  cur ++;
+  peer ++;
+  *success = true;
+  
   return 0;
 }
