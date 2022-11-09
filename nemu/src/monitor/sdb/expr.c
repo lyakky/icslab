@@ -4,12 +4,13 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_PLUS,TK_MINUS, TK_ASTERISK, TK_SLASH,
   TK_LPAREN, TK_RPAREN, TK_INT10,  TK_INT16
 
-  
 
   /* TODO: Add more token types */
 
@@ -125,33 +126,53 @@ static bool make_token(char *e) {
   return true;
 }
 
+static bool check_parentheses(int p, int q){
 
-  word_t expr(char *e, bool *success) {
+
+  return true;
+}
+
+static uint32_t eval(int p, int q){
+  if(p > q){
+    return -1;//bad expression
+  }else if(p == q){
+    uint32_t v;
+    switch(tokens[p].type){
+      case TK_INT10:
+        v = (uint32_t)atoi(tokens[p].str);
+        break;
+      case TK_INT16:
+        v = (uint32_t)strtoul(tokens[p].str, NULL, 16);
+        break;
+    }
+
+    return v;
+  } else if(check_parentheses(p, q) == true){
+    return eval(p+1, q-1);
+  }else{
+
+
+
+
+  }
+  return 0;
+}
+
+word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  //TODO();
-  int cur = 0,peer = 1;
-  unsigned long res = 0;
-  
-  switch (tokens[cur].type)
-  {
-  case TK_INT16:
-    res += strtoul(tokens[cur].str, NULL, 16);
-    Log("resolv INT16:%s, value:%ld", tokens[cur].str, res);
-    *success = true;
-    return (uint64_t)res;
-    break;
-  
-  default:
-    break;
+  uint32_t res;
+  res = eval(0, nr_token-1);
+  if(res < 0){
+    *success = false;
+    return -1;
   }
-  cur ++;
-  peer ++;
-  *success = true;
   
-  return 0;
+  *success = true;
+  return res;
 }
+

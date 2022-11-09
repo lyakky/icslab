@@ -63,29 +63,13 @@ static int cmd_info(char *args)
 static int cmd_memory(char *args)
 {
   char *limit = NULL, *exprstr = NULL;
-  char *token = NULL, *tmp = NULL;
-  int ind;
-  for (tmp = args, ind = 0;; tmp = NULL, ind++)
-  {
-    token = strtok(tmp, " ");
-    if (token == NULL)
-    {
-      break;
-    }
-    if (ind > 1)
-    {
-      nemu_state.state = NEMU_ABORT;
-      return -1;
-    }
-
-    if (ind == 0)
-    {
-      limit = token;
-    }
-    if (ind == 1)
-    {
-      exprstr = token;
-    }
+  limit = strtok(args, " ");
+  if(limit == NULL){
+    return -1;
+  }
+  exprstr = strtok(NULL, " ");
+  if(exprstr == NULL){
+    return -1;
   }
   int len = atoi(limit);
   bool b_expr;
