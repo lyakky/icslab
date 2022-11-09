@@ -1,4 +1,5 @@
 #include "debug.h"
+#include <assert.h>
 #include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -8,7 +9,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-enum {
+enum TK_TYPE{
   TK_NOTYPE = 256, TK_EQ, TK_PLUS,TK_MINUS, TK_ASTERISK, TK_SLASH,
   TK_LPAREN, TK_RPAREN, TK_INT10,  TK_INT16
 
@@ -16,6 +17,19 @@ enum {
   /* TODO: Add more token types */
 
 };
+
+//static struct op_priority{
+  //enum TK_TYPE type;
+  //uint8_t priority;
+//}Pris[] = {
+  //{TK_PLUS,       0b00000010},
+  //{TK_MINUS,      0b00000010},
+  //{TK_ASTERISK,   0b00000100},
+  //{TK_SLASH,      0b00000100},
+  //{TK_LPAREN,     0b00001000},
+  //{TK_RPAREN,     0b00001000}
+//};
+
 
 static struct rule {
   const char *regex;
@@ -128,9 +142,25 @@ static bool make_token(char *e) {
 }
 
 static bool check_parentheses(int p, int q){
-
-
-  return true;
+  int i = p,j;
+  for(; i<=q; i++){
+    if(tokens[i].type == TK_LPAREN){
+      for(j = i+1; j<=q; j++){
+        if(tokens[j].type == TK_RPAREN){
+          i=j+1;
+          break;
+        }
+      }
+      if(j == q && i != q+1){
+        assert(0);
+        //return -1;//表达式异常
+      }
+    }
+  }
+  if(tokens[p].type == TK_LPAREN && tokens[q].type == TK_RPAREN){
+    return true;
+  } 
+  return false;//正常表达式但没有被（）包裹
 }
 
 static uint32_t eval(int p, int q){
@@ -147,14 +177,44 @@ static uint32_t eval(int p, int q){
         v = (uint32_t)strtoul(tokens[p].str, NULL, 16);
         break;
     }
-    Log("eval value:%xd\n", v);
+    Log("eval value:%x\n", v);
     return v;
   } else if(check_parentheses(p, q) == true){
     return eval(p+1, q-1);
   }else{
+    //priority map: +-:3,*/:4 most priority:5
+    int main_op_pos = p;
+    uint8_t min_pri = 5;
+    for(int i = p; i <= q; i++){
+        enum TK_TYPE type = tokens[i].type;
+        if (type == TK_LPAREN){
+          for(int j = i+1; j<=q; j++){
+            if(tokens[j].type == TK_RPAREN){
+              i=j+1;
+              break;
+            }
+          }
+        }
+        if(type == TK_PLUS || type == TK_MINUS) {
+          main_op_pos = i;
+          min_pri = 3;
+        }
+        if(type == TK_ASTERISK || type == TK_SLASH ){
+          if(min_pri == 5){
+            main_op_pos = i;
+            min_pri = 4;
+          }
+        }
+    }
+    uint32_t v_left = eval(p, main_op_pos - 1);
+    uint32_t v_right = eval(main_op_pos + 1, q);
 
-
-
+    switch (tokens[main_op_pos].type) {
+      case TK_PLUS:
+        return v_left + v_right;
+      case TK_ASTERISK:
+        return v_left * v_right;
+    }
 
   }
   return 0;
