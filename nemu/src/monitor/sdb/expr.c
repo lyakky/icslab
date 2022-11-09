@@ -147,7 +147,7 @@ static uint32_t eval(int p, int q){
         v = (uint32_t)strtoul(tokens[p].str, NULL, 16);
         break;
     }
-    Log("eval value:%ud\n", v);
+    Log("eval value:%xd\n", v);
     return v;
   } else if(check_parentheses(p, q) == true){
     return eval(p+1, q-1);
