@@ -1,3 +1,4 @@
+#include "debug.h"
 #include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -145,7 +146,7 @@ static uint32_t eval(int p, int q){
         v = (uint32_t)strtoul(tokens[p].str, NULL, 16);
         break;
     }
-
+    Log("eval value:%d\n", v);
     return v;
   } else if(check_parentheses(p, q) == true){
     return eval(p+1, q-1);
