@@ -134,6 +134,7 @@ static bool check_parentheses(int p, int q){
 }
 
 static uint32_t eval(int p, int q){
+  Log("eval p:%d q:%d tokens[p]'s type :%d str:%s,tokens[q]'s type:%d str:%s\n", p, q, tokens[p].type, tokens[p].str, tokens[q].type, tokens[q].str);
   if(p > q){
     return -1;//bad expression
   }else if(p == q){
