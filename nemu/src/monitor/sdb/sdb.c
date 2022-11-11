@@ -2,6 +2,7 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "debug.h"
 #include "sdb.h"
 #include "memory/vaddr.h"
 
@@ -74,6 +75,7 @@ static int cmd_memory(char *args)
   int len = atoi(limit);
   bool b_expr;
   //uint64_t loc = strtoull(exprstr, NULL, 16);
+  Log("expr str:%s\b", exprstr);
   uint64_t loc = expr(exprstr, &b_expr);
   if (!b_expr)
   {
