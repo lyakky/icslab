@@ -2,6 +2,7 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <string.h>
 #include "debug.h"
 #include "sdb.h"
 #include "memory/vaddr.h"
@@ -64,8 +65,8 @@ static int cmd_info(char *args)
 static int cmd_memory(char *args)
 {
   Log("cmd memory args:%s\n", args);
-  char *limit = NULL, *exprstr = NULL, *tmp = args;
-  limit = strtok(tmp, " ");
+  char *limit = NULL, *exprstr = NULL ;
+  limit = strtok(args, " ");
   if(limit == NULL){
     return -1;
   }
@@ -85,7 +86,6 @@ static int cmd_memory(char *args)
     word_t v = vaddr_read(loc + 4 * i, 4);
     printf("loc:%#08lx, memval:%#08lx\n", loc + i * 4, v);
   }
-
   printf("\n");
   return 0;
 }

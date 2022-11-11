@@ -221,6 +221,8 @@ static uint32_t eval(int p, int q){
         return v_left * v_right;
       case TK_MINUS:
         return v_left - v_right;
+      case TK_SLASH:
+        return v_left - v_right;
     }
 
   }
