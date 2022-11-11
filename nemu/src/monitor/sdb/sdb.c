@@ -64,8 +64,8 @@ static int cmd_info(char *args)
 static int cmd_memory(char *args)
 {
   Log("cmd memory args:%s\n", args);
-  char *limit = NULL, *exprstr = NULL;
-  limit = strtok(args, " ");
+  char *limit = NULL, *exprstr = NULL, *tmp = args;
+  limit = strtok(tmp, " ");
   if(limit == NULL){
     return -1;
   }
