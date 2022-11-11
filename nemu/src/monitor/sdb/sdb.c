@@ -69,13 +69,9 @@ static int cmd_memory(char *args)
   if(limit == NULL){
     return -1;
   }
-  exprstr = strtok(NULL, " ");
-  if(exprstr == NULL){
-    return -1;
-  }
   int len = atoi(limit);
   bool b_expr;
-  //uint64_t loc = strtoull(exprstr, NULL, 16);
+  exprstr = args + strlen(limit+1);
   Log("expr str:%s\b", exprstr);
   uint64_t loc = expr(exprstr, &b_expr);
   if (!b_expr)
